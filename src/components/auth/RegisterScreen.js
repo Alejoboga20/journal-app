@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
+import validator from 'validator';
 
 export const RegisterScreen = () => {
   const initialState = { name: '', email: '', password: '', password2: '' };
@@ -9,9 +10,26 @@ export const RegisterScreen = () => {
 
   const { name, email, password, password2 } = formValues;
 
+  const isFormValid = () => {
+    if (name.trim().length === 0) {
+      console.log('Name is required');
+      return false;
+    } else if (!validator.isEmail(email)) {
+      console.log('email invalid');
+      return false;
+    } else if (password !== password2 || password.length < 5) {
+      console.log('Passwords should be equal and at least 5 characters long');
+      return false;
+    }
+  };
+
   const handleRegister = (e) => {
     e.preventDefault();
     console.log(name, email, password, password2);
+
+    if (isFormValid()) {
+      console.log('Form correct');
+    }
   };
 
   return (
@@ -23,6 +41,7 @@ export const RegisterScreen = () => {
           type='text'
           placeholder='Name'
           name='name'
+          value={name}
           autoComplete='off'
           className='auth__input'
           onChange={handleInputChange}
@@ -31,6 +50,7 @@ export const RegisterScreen = () => {
           type='text'
           placeholder='Email'
           name='email'
+          value={email}
           autoComplete='off'
           className='auth__input'
           onChange={handleInputChange}
@@ -39,6 +59,7 @@ export const RegisterScreen = () => {
           type='password'
           placeholder='Password'
           name='password'
+          value={password}
           className='auth__input'
           onChange={handleInputChange}
         />
@@ -46,6 +67,7 @@ export const RegisterScreen = () => {
           type='password'
           placeholder='Confirm Password'
           name='password2'
+          value={password2}
           className='auth__input'
           onChange={handleInputChange}
         />
