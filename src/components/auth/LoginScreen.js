@@ -1,22 +1,37 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import validator from 'validator';
 import { startGoogleLogin, startLoginEmailPassword } from '../../actions/auth';
+import { setUIError } from '../../actions/ui';
 import useForm from '../../hooks/useForm';
 
 export const LoginScreen = () => {
   const dispatch = useDispatch();
 
-  const [formValues, handleInputChange] = useForm({
-    email: 'test@gmail.com',
-    passwod: 12345
-  });
+  const isFormValid = () => {
+    if (!validator.isEmail(email) || password.trim().length <= 5) {
+      dispatch(setUIError('Please enter valid email and password'));
+      return false;
+    }
 
-  const { email, passwod } = formValues;
+    return true;
+  };
+
+  const initialFormValues = {
+    email: '',
+    password: ''
+  };
+
+  const [formValues, handleInputChange] = useForm(initialFormValues);
+  const { email, password } = formValues;
 
   const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(startLoginEmailPassword(email, passwod));
+
+    if (isFormValid()) {
+      dispatch(startLoginEmailPassword(email, password));
+    }
   };
 
   const handleGoogleLogin = () => dispatch(startGoogleLogin());
@@ -40,7 +55,7 @@ export const LoginScreen = () => {
           placeholder='Password'
           name='password'
           className='auth__input'
-          value={passwod}
+          value={password}
           onChange={handleInputChange}
         />
         <button type='submit' className='btn btn-primary btn-block'>

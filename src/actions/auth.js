@@ -2,11 +2,8 @@ import { firebase, googleAuthProvider } from '../firebase/firebase-config';
 import { types } from '../types/types';
 
 export const startLoginEmailPassword = (email, password) => {
-  return (dispatch) => {
-    setTimeout(() => {
-      dispatch(login(123, 'Alejo'));
-    }, 3500);
-  };
+  console.log(email, password);
+  return (dispatch) => {};
 };
 
 export const startRegisterWithEmailPasswordName = (email, password, name) => {
