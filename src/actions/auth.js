@@ -2,8 +2,16 @@ import { firebase, googleAuthProvider } from '../firebase/firebase-config';
 import { types } from '../types/types';
 
 export const startLoginEmailPassword = (email, password) => {
-  console.log(email, password);
-  return (dispatch) => {};
+  return (dispatch) => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(({ user }) => {
+        const { uid, displayName } = user;
+        dispatch(login(uid, displayName));
+      })
+      .catch((e) => console.log(e));
+  };
 };
 
 export const startRegisterWithEmailPasswordName = (email, password, name) => {
