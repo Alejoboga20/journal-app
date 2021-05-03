@@ -14,7 +14,10 @@ export const startLoginEmailPassword = (email, password) => {
         dispatch(login(uid, displayName));
         dispatch(finishLoading());
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        dispatch(finishLoading());
+      });
   };
 };
 
