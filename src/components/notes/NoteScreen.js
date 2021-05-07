@@ -27,6 +27,7 @@ export const NoteScreen = () => {
       <div className='notes__content'>
         <input
           type='text'
+          name='title'
           placeholder='Title'
           className='notes__title-input'
           value={title}
@@ -35,6 +36,7 @@ export const NoteScreen = () => {
         <textarea
           placeholder='What happened today'
           className='notes__textarea'
+          name='body'
           value={body}
           onChange={handleInputChange}
         ></textarea>
