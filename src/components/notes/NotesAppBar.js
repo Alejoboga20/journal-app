@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { startSaveNote, startUploading } from '../../actions/notes';
 
 export const NotesAppBar = () => {
+  const dateToDisplay = new Date();
   const { active: note } = useSelector((state) => state.notes);
   const dispatch = useDispatch();
 
@@ -25,7 +26,7 @@ export const NotesAppBar = () => {
 
   return (
     <div className='notes__appbar'>
-      <span>28 de agosto</span>
+      <span>{dateToDisplay.getDate()}</span>
 
       <input
         id='fileSelector'
