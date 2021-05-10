@@ -1,4 +1,11 @@
+import cloudinary from 'cloudinary';
 import { fileUpload } from '../../helpers/fileUpload';
+
+cloudinary.config = {
+  cloud_name: 'finastra',
+  api_key: '245889453199165',
+  api_secret: 'bS-xIf2Qts5ZxixbHLRPETnmJvA'
+};
 
 describe('fileUpload tests', () => {
   test('should upload a file and return a ulr', async () => {
