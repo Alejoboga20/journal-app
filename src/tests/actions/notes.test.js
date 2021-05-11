@@ -1,16 +1,25 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { startNewNote } from '../../actions/notes';
+import {
+  startLoadingNotes,
+  startNewNote,
+  startSaveNote
+} from '../../actions/notes';
 import { db } from '../../firebase/firebase-config';
 import { types } from '../../types/types';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
-const store = mockStore({
-  auth: 'testUid'
-});
+
+const initialState = {
+  auth: { uid: 'testUid' }
+};
+
+let store = mockStore(initialState);
 
 describe('Notes actions tests', () => {
+  beforeEach(() => (store = mockStore(initialState)));
+
   test('should create a new note with startNewNote', async () => {
     await store.dispatch(startNewNote());
 
@@ -34,6 +43,41 @@ describe('Notes actions tests', () => {
       }
     });
     const docId = actions[0].payload.id;
-    const response = await db.doc(`/undefined/journal/notes/${docId}`).delete();
+    await db.doc(`/testUid/journal/notes/${docId}`).delete();
+  });
+
+  test('should load notes', async () => {
+    await store.dispatch(startLoadingNotes('testUid'));
+    const actions = store.getActions();
+
+    expect(actions[0]).toEqual({
+      type: types.notesLoad,
+      payload: expect.any(Array)
+    });
+
+    const expected = {
+      id: expect.any(String),
+      title: expect.any(String),
+      body: expect.any(String),
+      date: expect.any(Number)
+    };
+
+    expect(actions[1].payload[0]).toMatchObject(expected);
+  });
+
+  test('should update note', async () => {
+    const note = {
+      id: 'aaLX8wkFpWHhEabCLHnw',
+      title: 'TestTitle',
+      body: 'TestBody'
+    };
+
+    await store.dispatch(startSaveNote(note));
+    const actions = store.getActions();
+
+    expect(actions[0].type).toBe(types.notesUpdated);
+
+    const docRef = await db.doc(`/testUid/journal/notes/${note.id}`).get();
+    expect(docRef.data().title).toBe(note.title);
   });
 });
