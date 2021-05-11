@@ -11,7 +11,23 @@ const firebaseConfig = {
   appId: '1:1054449930791:web:7806bc2639749cc28fb402'
 };
 
-firebase.initializeApp(firebaseConfig);
+const firebaseConfigTesting = {
+  apiKey: 'AIzaSyAltB-4FbCkOirnhy2bOE50blvAMgwLtjg',
+  authDomain: 'expensify-3aaf9.firebaseapp.com',
+  databaseURL: 'https://expensify-3aaf9.firebaseio.com',
+  projectId: 'expensify-3aaf9',
+  storageBucket: 'expensify-3aaf9.appspot.com',
+  messagingSenderId: '173409672265',
+  appId: '1:173409672265:web:1941a13e23d0d6ce6a7398'
+};
+
+if (process.env.NODE_ENV === 'test') {
+  //testing
+  firebase.initializeApp(firebaseConfigTesting);
+} else {
+  //dev prod
+  firebase.initializeApp(firebaseConfig);
+}
 
 const db = firebase.firestore();
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
