@@ -3,31 +3,16 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDm_JxZMhuMb_DRHfMw_fwJPqAvqJp9UC4',
-  authDomain: 'react-journal-app-35555.firebaseapp.com',
-  projectId: 'react-journal-app-35555',
-  storageBucket: 'react-journal-app-35555.appspot.com',
-  messagingSenderId: '1054449930791',
-  appId: '1:1054449930791:web:7806bc2639749cc28fb402'
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTHDOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID
 };
 
-const firebaseConfigTesting = {
-  apiKey: 'AIzaSyAltB-4FbCkOirnhy2bOE50blvAMgwLtjg',
-  authDomain: 'expensify-3aaf9.firebaseapp.com',
-  databaseURL: 'https://expensify-3aaf9.firebaseio.com',
-  projectId: 'expensify-3aaf9',
-  storageBucket: 'expensify-3aaf9.appspot.com',
-  messagingSenderId: '173409672265',
-  appId: '1:173409672265:web:1941a13e23d0d6ce6a7398'
-};
-
-if (process.env.NODE_ENV === 'test') {
-  //testing
-  firebase.initializeApp(firebaseConfigTesting);
-} else {
-  //dev prod
-  firebase.initializeApp(firebaseConfig);
-}
+firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
