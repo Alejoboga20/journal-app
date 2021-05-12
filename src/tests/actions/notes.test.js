@@ -3,16 +3,31 @@ import thunk from 'redux-thunk';
 import {
   startLoadingNotes,
   startNewNote,
-  startSaveNote
+  startSaveNote,
+  startUploading
 } from '../../actions/notes';
 import { db } from '../../firebase/firebase-config';
+import { fileUpload } from '../../helpers/fileUpload';
 import { types } from '../../types/types';
+
+jest.mock('../../helpers/fileUpload', () => ({
+  fileUpload: jest.fn(() => {
+    return Promise.resolve('https://helloworld.com/thing.jpg');
+  })
+}));
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
 const initialState = {
-  auth: { uid: 'testUid' }
+  auth: { uid: 'testUid' },
+  notes: {
+    active: {
+      id: '3ccXDme0dPKRvivXvhE8',
+      title: 'Hello',
+      body: 'World'
+    }
+  }
 };
 
 let store = mockStore(initialState);
@@ -79,5 +94,15 @@ describe('Notes actions tests', () => {
 
     const docRef = await db.doc(`/testUid/journal/notes/${note.id}`).get();
     expect(docRef.data().title).toBe(note.title);
+  });
+
+  test('should start uploading and update entry url', async () => {
+    const file = new File([], 'foto.jpg');
+    await store.dispatch(startUploading(file));
+
+    const docRef = await db
+      .doc('/testUid/journal/notes/3ccXDme0dPKRvivXvhE8')
+      .get();
+    expect(docRef.data().url).toBe('https://helloworld.com/thing.jpg');
   });
 });
