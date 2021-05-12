@@ -49,4 +49,29 @@ describe('RegisterScreen Tests', () => {
       payload: 'Name is required'
     });
   });
+
+  test('should show error message', () => {
+    const initialState = {
+      auth: {},
+      ui: {
+        loading: false,
+        msgError: 'Test Error'
+      }
+    };
+
+    const store = mockStore(initialState);
+
+    const wrapper = mount(
+      <Provider store={store}>
+        <MemoryRouter>
+          <RegisterScreen />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    expect(wrapper.find('.auth__alert-error').exists()).toBe(true);
+    expect(wrapper.find('.auth__alert-error').text()).toBe(
+      initialState.ui.msgError
+    );
+  });
 });
